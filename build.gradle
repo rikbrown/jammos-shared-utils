@@ -3,6 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.1.51'
+    ext.jackson_version = '2.9.2'
 
     repositories {
         mavenCentral()
@@ -30,4 +31,12 @@ dependencies {
     compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.1'
+
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "$jackson_version"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "$jackson_version"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "$jackson_version"
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: "$jackson_version"
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: "$jackson_version"
+
+    compile group: 'biz.paluch.redis', name: 'lettuce', version: '4.3.2.Final'
 }

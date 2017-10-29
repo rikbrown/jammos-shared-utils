@@ -2,9 +2,8 @@ package net.jammos.utils
 
 import java.io.IOException
 import java.security.SecureRandom
-import java.util.*
 
-val RANDOM: Random = SecureRandom.getInstanceStrong()
+val RANDOM: SecureRandom = SecureRandom.getInstanceStrong()
 
 inline fun <T: Any, R> some (value: T?, f: (T) -> R): R?
         = if (value != null) f(value) else null

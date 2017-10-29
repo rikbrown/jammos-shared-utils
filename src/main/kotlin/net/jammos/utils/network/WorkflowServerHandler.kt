@@ -11,7 +11,7 @@ abstract class WorkflowServerHandler(firstStep: Step<*, *>) : ChannelInboundHand
     companion object: KLogging()
 
     // First step is waiting for a login challenge
-    private var step: Step<*, *> = firstStep
+    protected var step: Step<*, *> = firstStep
 
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
         try {
@@ -19,10 +19,13 @@ abstract class WorkflowServerHandler(firstStep: Step<*, *>) : ChannelInboundHand
 
             // Handle message and potentially move to the next step
             val (response, nextStep) = step.handle(msg)
-            logger.debug { "Responding with: $response" }
 
-            // Write the response
-            ctx.writeAndFlush(response)
+            if (response != null) {
+                logger.debug { "Responding with: $response" }
+
+                // Write the response
+                ctx.writeAndFlush(response)
+            }
 
             // No more actions possible, close connection
             if (nextStep == null) {

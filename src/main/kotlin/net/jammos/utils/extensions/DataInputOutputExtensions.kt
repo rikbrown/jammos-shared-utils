@@ -3,7 +3,6 @@ package net.jammos.utils.extensions
 import com.google.common.net.InetAddresses
 import net.jammos.utils.types.BigUnsignedInteger
 import java.io.DataInput
-import java.io.DataOutput
 import java.net.InetAddress
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -26,7 +25,7 @@ fun DataInput.readChars(until: Byte = 0, reverse: Boolean = true): String {
         }
         sb.append(byte.toChar())
     }
-    return sb.toString()
+    return if (reverse) sb.toString().reversed() else sb.toString()
 }
 
 /**
@@ -63,13 +62,6 @@ fun DataInput.readBigUnsigned(size: Int): BigUnsignedInteger {
     return BigUnsignedInteger(bytes)
 }
 
-fun DataOutput.writeShortLe(value: Int) {
-    write(ByteBuffer
-            .allocate(2)
-            .order(ByteOrder.LITTLE_ENDIAN)
-            .putShort(value.toShort())
-            .array())
-}
 
 /*fun DataOutput.writeChars(string: String, reverse: Boolean = false) {
 

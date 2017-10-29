@@ -14,7 +14,7 @@ abstract class Step<T : Any, out R: Any>(val messageType: KClass<T>) {
     abstract fun handle0(msg: T): ResponseAndNextStep<R>
 
     data class ResponseAndNextStep<out R: Any>(
-            val response: R,
+            val response: R?,
             val nextStep: Step<*, *>? = null)
 }
 
