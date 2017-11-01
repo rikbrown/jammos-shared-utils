@@ -1,6 +1,6 @@
 package net.jammos.utils.types
 
-open class ComparableByteArray(val bytes: ByteArray) {
+open class ComparableByteArray (val bytes: ByteArray) {
     override fun equals(other: Any?) = other is ComparableByteArray && bytes contentEquals other.bytes
     override fun hashCode() = bytes.contentHashCode()
 }
