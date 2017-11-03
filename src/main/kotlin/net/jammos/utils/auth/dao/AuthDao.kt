@@ -10,6 +10,7 @@ import java.time.Instant
 
 interface AuthDao {
     fun getUserAuth(username: Username): UserAuth?
+    fun getUserUsername(userId: UserId): Username?
     fun getUserSuspension(userId: UserId): UserSuspension?
 
     fun createUser(username: Username, password: String): UserAuth

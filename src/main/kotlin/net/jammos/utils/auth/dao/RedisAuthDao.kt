@@ -5,6 +5,7 @@ import com.lambdaworks.redis.RedisClient
 import mu.KLogging
 import net.jammos.utils.ByteArrays.randomBytes
 import net.jammos.utils.auth.*
+import net.jammos.utils.auth.Username.Username.username
 import net.jammos.utils.auth.crypto.CryptoManager
 import net.jammos.utils.extensions.minutes
 import net.jammos.utils.json.fromJson
@@ -25,6 +26,7 @@ class RedisAuthDao(
         val AUTH_FAILURES_TTL: Duration = 30.minutes
 
         fun usernameAuthKey(username: Username) = "username:$username:auth"
+        fun userUsernameKey(userId: UserId) = "user:$userId:username"
         fun userAuthFailuresKey(userId: UserId) = "user:$userId:auth_failure_count"
         fun userSuspensionKey(userId: UserId) = "user:$userId:suspension"
         fun userSessionKeyKey(userId: UserId) = "user:$userId:session_key"
@@ -37,6 +39,8 @@ class RedisAuthDao(
                 ?.fromJson<UserAuth>()
                 ?.copy(username = username)
     }
+
+    override fun getUserUsername(userId: UserId) = conn.get(userUsernameKey(userId))?.let { username(it) }
 
     override fun getUserSuspension(userId: UserId): UserSuspension? {
         return conn.get(userSuspensionKey(userId))?.fromJson()
@@ -64,6 +68,7 @@ class RedisAuthDao(
 
         // save in redis
         conn.set(usernameAuthKey(username), user.toJson())
+        conn.set(userUsernameKey(userId), username.toString())
 
         return user
     }
@@ -125,11 +130,12 @@ class RedisAuthDao(
         verifier: <binary>,
     }
 
-    user:<username>:session_key = <binary>
-    user:<username>:auth_failure_count = <int>
+    user:<userid>:username = <string>
+    user:<userid>:session_key = <binary>
+    user:<userid>:auth_failure_count = <int>
 
 
-    user:<username>:suspension: {
+    user:<userid>:suspension: {
         start: <time>,
         end: <time>
     }
