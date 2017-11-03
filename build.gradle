@@ -24,7 +24,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     compile group: 'io.github.microutils', name: 'kotlin-logging', version: '1.4.5'
-    compile group: 'io.netty', name: 'netty-all', version: '4.1.9.Final'
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.16.Final'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.5'
 
     compile group: 'com.google.guava', name: 'guava', version: '22.0'
