@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets.UTF_8
 import java.time.Duration
 import java.time.Instant
 import java.time.format.DateTimeParseException
-import java.util.*
 
 class RedisAuthDao(
         redisClient: RedisClient,
@@ -26,12 +25,11 @@ class RedisAuthDao(
         val AUTH_FAILURES_TTL: Duration = 30.minutes
 
         fun usernameAuthKey(username: Username) = "username:$username:auth"
-
         fun userAuthFailuresKey(userId: UserId) = "user:$userId:auth_failure_count"
         fun userSuspensionKey(userId: UserId) = "user:$userId:suspension"
         fun userSessionKeyKey(userId: UserId) = "user:$userId:session_key"
-
         fun ipSuspensionKey(ip: InetAddress) = "ip:$ip:suspended_until"
+        private val lastUserIdKey = "user:_lastId"
     }
 
     override fun getUserAuth(username: Username): UserAuth? {
@@ -45,7 +43,11 @@ class RedisAuthDao(
     }
 
     override fun createUser(username: Username, password: String): UserAuth {
-        val userId = UserId(UUID.randomUUID().toString())
+        // Verify whether the user exists and bail if so
+        getUserAuth(username)?.let { throw UserAlreadyExistsException(username) }
+
+        // Create a user ID
+        val userId = nextUserId()
 
         val salt = SaltByteArray(randomBytes(32))
         val passwordUpper = password.toUpperCase()
@@ -110,6 +112,10 @@ class RedisAuthDao(
             return null
         }
     }
+
+    private fun nextUserId() = UserId(conn.incr(lastUserIdKey).toString())
+
+    class UserAlreadyExistsException(username: Username): IllegalArgumentException("User already exists: $username")
 }
 
 /*
