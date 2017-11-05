@@ -17,6 +17,10 @@ inline fun checkArgument(condition: Boolean, message: () -> String) {
     if (!condition) rejectArgument(message())
 }
 
+fun checkArgument(condition: Boolean, message: String) {
+    if (!condition) rejectArgument(message)
+}
+
 fun rejectArgument(message: String): Nothing {
     throw IllegalArgumentException(message)
 }

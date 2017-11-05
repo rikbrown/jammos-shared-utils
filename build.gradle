@@ -22,6 +22,8 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '0.19.3'
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-jdk8', version: '0.19.3'
 
     compile group: 'io.github.microutils', name: 'kotlin-logging', version: '1.4.5'
     compile group: 'io.netty', name: 'netty-all', version: '4.1.16.Final'
@@ -39,4 +41,10 @@ dependencies {
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: "$jackson_version"
 
     compile group: 'biz.paluch.redis', name: 'lettuce', version: '4.3.2.Final'
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }

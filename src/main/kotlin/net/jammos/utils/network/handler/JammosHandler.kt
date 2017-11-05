@@ -34,7 +34,13 @@ abstract class JammosHandler: ChannelInboundHandlerAdapter() {
 
     @Suppress("OverridingDeprecatedMember") // deprecation warning is only on one base class
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
-        logger.error(cause) { "Caught exception, disconnecting" }
+        logger.error(cause) { "Caught exception in handler" }
+        handleException(ctx, cause)
+    }
+
+    open fun handleException(ctx: ChannelHandlerContext, cause: Throwable) {
+        // by default, kick them out
+        logger.warn("Disconnecting client because of exception")
         ctx.disconnect()
         ctx.close()
     }
