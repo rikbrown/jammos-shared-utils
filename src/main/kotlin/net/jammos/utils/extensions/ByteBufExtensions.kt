@@ -63,7 +63,3 @@ fun ByteBuf.writeCharSequenceTerminated(string: String, terminator: Int = 0) {
     writeByte(terminator)
 }
 
-// TODO: remove when Netty adds this
-fun ByteBuf.writeFloatLE(value: Float) {
-    writeBytes(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putFloat(value).array())
-}
