@@ -25,6 +25,11 @@ abstract class JammosHandler: ChannelInboundHandlerAdapter() {
         ctx.writeAndFlush(msg)
     }
 
+    fun write(ctx: ChannelHandlerContext, msg: Any) {
+        logger.debug { "Writing with: $msg" }
+        ctx.write(msg)
+    }
+
     fun closeSession(ctx: ChannelHandlerContext) {
         logger.info { "Closing session" }
         // If we don't specify this, it seems like we close too quickly
